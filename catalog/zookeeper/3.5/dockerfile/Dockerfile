@@ -10,8 +10,8 @@ ENV ZOO_USER=zookeeper
 RUN set -x \
   && adduser -D "$ZOO_USER"
 
-ARG GPG_KEY=767E7473
-ARG DISTRO_NAME=zookeeper-3.4.13
+ARG DISTRO_FOLDER=zookeeper-3.5.8
+ARG DISTRO_NAME=apache-$DISTRO_FOLDER-bin
 
 
 # Download Apache Zookeeper, verify its PGP signature, untar and clean up
@@ -20,9 +20,10 @@ RUN set -ex; \
         ca-certificates \
         gnupg \
         libressl; \
-    wget -q "https://www.apache.org/dist/zookeeper/$DISTRO_NAME/$DISTRO_NAME.tar.gz"; \
-    wget -q "https://www.apache.org/dist/zookeeper/$DISTRO_NAME/$DISTRO_NAME.tar.gz.asc"; \
+    wget -q "https://www.apache.org/dist/zookeeper/$DISTRO_FOLDER/$DISTRO_NAME.tar.gz"; \
+    wget -q "https://www.apache.org/dist/zookeeper/$DISTRO_FOLDER/$DISTRO_NAME.tar.gz.asc"; \
     export GNUPGHOME="$(mktemp -d)"; \
+    export GPG_KEY=$(gpg --keyid-format=short --list-packets "$DISTRO_NAME.tar.gz.asc" | grep -oE 'keyid .*' | cut -f2 -d' '); \
     gpg --keyserver ha.pool.sks-keyservers.net --recv-key "$GPG_KEY" || \
     gpg --keyserver pgp.mit.edu --recv-keys "$GPG_KEY" || \
     gpg --keyserver keyserver.pgp.com --recv-keys "$GPG_KEY"; \
@@ -38,7 +39,7 @@ ENV PATH=$PATH:/$DISTRO_NAME/bin
 RUN sed -i 's/#networkaddress.cache.ttl=-1/networkaddress.cache.ttl=10/g' $JAVA_HOME/lib/security/java.security
 
 COPY docker-entrypoint.sh /
-ENTRYPOINT ["/docker-entrypoint.sh", "zkServer.sh", "start-foreground"]
+ENTRYPOINT ["/docker-entrypoint.sh", "zkServer.sh", "--config", "/etc/zk", "start-foreground"]
 
 # expose client port, peer connect port, leader elect port
 EXPOSE 2181 2888 3888

@@ -1,4 +1,4 @@
-FROM debian:jessie-slim
+FROM debian:buster-slim
 
 RUN set -x \
   && apt-get update \

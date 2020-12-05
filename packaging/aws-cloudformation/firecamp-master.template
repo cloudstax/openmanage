@@ -225,7 +225,7 @@
             "Type": "String"
         },
         "BastionInstanceType": {
-            "Default": "t2.micro",
+            "Default": "t3.micro",
             "Type": "String",
             "Description": "Amazon EC2 instance type for the second bastion instance",
             "AllowedValues": [
@@ -243,9 +243,13 @@
                 "t3.large",
                 "t3.xlarge",
                 "t3.2xlarge",
-                "m3.large",
-                "m3.xlarge",
-                "m3.2xlarge",
+                "t3a.nano",
+                "t3a.micro",
+                "t3a.small",
+                "t3a.medium",
+                "t3a.large",
+                "t3a.xlarge",
+                "t3a.2xlarge",
                 "m4.large",
                 "m4.xlarge",
                 "m4.2xlarge",
@@ -253,7 +257,11 @@
                 "m5.large",
                 "m5.xlarge",
                 "m5.2xlarge",
-                "m5.4xlarge"
+                "m5.4xlarge",
+                "m5a.large",
+                "m5a.xlarge",
+                "m5a.2xlarge",
+                "m5a.4xlarge"
             ]
         },
         "NumBastionHosts": {
@@ -307,6 +315,9 @@
             "Default": "latest",
             "AllowedValues": [
                 "latest",
+                "1.3",
+                "1.2",
+                "1.1",
                 "1.0"
             ],
             "Description": "The FireCamp System Services release version. For the detail release notes, please refer to https://github.com/cloudstax/firecamp/releases."
@@ -316,6 +327,9 @@
             "Default": "latest",
             "AllowedValues": [
                 "latest",
+                "1.3",
+                "1.2",
+                "1.1",
                 "1.0"
             ],
             "Description": "The FireCamp Catalog Service release version. For the detail release notes, please refer to https://github.com/cloudstax/firecamp/releases."

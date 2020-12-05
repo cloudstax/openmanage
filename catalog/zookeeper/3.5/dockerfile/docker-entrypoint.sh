@@ -17,6 +17,7 @@ servicecfgfile=$confdir/service.conf
 membercfgfile=$confdir/member.conf
 
 export ZOOCFGDIR=/etc/zk
+export ZOO_LOG_DIR=.
 
 # sanity check to make sure the volume is mounted to /data.
 if [ ! -d "$datadir" ]; then

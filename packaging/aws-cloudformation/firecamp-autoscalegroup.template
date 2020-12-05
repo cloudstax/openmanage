@@ -86,6 +86,10 @@
             "Default": "quickstart-cloudstax-firecamp/",
             "Type": "String"
         },
+        "SNSTopicARN": {
+            "Default": "",
+            "Type": "String"
+        },
         "LatestAMIId": {
     	    "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
     	    "Default": "/aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-gp2"
@@ -191,6 +195,33 @@
                                     "Ref": "Release"
                                 },
                                 "\n",
+                                "# get and install the checking disks script\n",
+                                "for i in 1 2 3\n",
+                                "do\n",
+                                "  wget -O /usr/local/bin/check_disks_and_alert_by_sns.sh https://s3.amazonaws.com/",
+                                {
+                                    "Ref": "QSS3BucketName"
+                                },
+                                "/",
+                                {
+                                    "Ref": "QSS3KeyPrefix"
+                                },
+                                "scripts/check_disks_and_alert_by_sns.sh\n",
+                                "  if [ \"$?\" = \"0\" ]; then\n",
+                                "    break\n",
+                                "  elif [ \"$i\" = \"3\" ]; then\n",
+                                "    echo \"failed to get check_disks_and_alert_by_sns.sh\"\n",
+                                "    exit 2\n",
+                                "  else\n",
+                                "    sleep 4\n",
+                                "  fi\n",
+                                "done\n",
+                                "chmod +x /usr/local/bin/check_disks_and_alert_by_sns.sh\n",
+                                "echo \"0 */1 * * * root /usr/local/bin/check_disks_and_alert_by_sns.sh ",
+                                {
+                                    "Ref": "SNSTopicARN"
+                                },
+                                "\" > /etc/cron.d/check_disks_and_alert_by_sns\n",
                                 "# get and run the node init script\n",
                                 "for i in 1 2 3\n",
                                 "do\n",

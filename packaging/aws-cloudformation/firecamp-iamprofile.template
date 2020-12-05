@@ -45,7 +45,8 @@
               "ecs:RegisterContainerInstance",
               "ecs:StartTelemetrySession",
               "ecs:Submit*",
-              "ecs:Update*"
+              "ecs:Update*",
+              "ecs:TagResource"
             ],
             "Resource":"*"
           }]
@@ -63,9 +64,19 @@
           "Statement":[{
             "Effect":"Allow",
             "Action":[
+              "ssm:GetDocument",
+              "ssm:PutInventory",
               "ssm:ListAssociations",
               "ssm:ListInstanceAssociations",
               "ssm:UpdateInstanceInformation",
+              "ssm:UpdateInstanceAssociationStatus",
+              "ssm:PutComplianceItems",
+              "ssmmessages:CreateControlChannel",
+              "ssmmessages:CreateDataChannel",
+              "ssmmessages:OpenControlChannel",
+              "ssmmessages:OpenDataChannel",
+              "ec2messages:AcknowledgeMessage",
+              "ec2messages:SendReply",
               "ec2messages:GetMessages"
             ],
             "Resource":"*"
@@ -119,6 +130,13 @@
             "Effect":"Allow",
             "Action":[
               "cloudwatch:PutMetricData"
+            ],
+            "Resource":"*"
+          },
+          {
+            "Effect":"Allow",
+            "Action":[
+              "sns:Publish"
             ],
             "Resource":"*"
           },

@@ -82,7 +82,7 @@ Currently the template supports 2 and 3 AZs. It is recommended to use 3 AZs for 
 ```
 #!/bin/sh
 
-aws cloudformation create-stack --stack-name t1 --disable-rollback --capabilities CAPABILITY_IAM --template-url https://s3.amazonaws.com/quickstart-reference/cloudstax/firecamp/latest/templates/firecamp-master.template --parameters file://stack-master.json
+aws cloudformation create-stack --stack-name t1 --disable-rollback --capabilities CAPABILITY_IAM --template-url path_to_your_s3_bucket/firecamp/latest/templates/firecamp-master.template --parameters file://stack-master.json
 ```
 
 ## Install the Application Cluster
@@ -100,7 +100,7 @@ After all stateful services are deleted, delete the CloudFormation stack, which 
 # The FireCamp Service CLI
 A Bastion AutoScaleGroup is created and is the only one that could SSH to the cluster nodes, and access the FireCamp manage server. The nodes in the FireCamp Cluster could also access the manage server.
 
-After the stack is created, could ssh to the Bastion node, get the FireCamp service cli of the current release such as 0.9.x, `wget https://s3.amazonaws.com/cloudstax/firecamp/releases/0.9.x/packages/firecamp-service-cli.tgz`
+After the stack is created, could ssh to the Bastion node, get the FireCamp service cli of the current release such as 0.9.x, `wget https://github.com/jazzl0ver/firecamp/releases/download/latest/firecamp-service-cli.tgz`
 
 ## Create the Stateful Service
 The MongoDB or PostgreSQL cluster could be simply created using the firecamp-service-cli. In case the service creation command fails, could simply retry it. **It is recommended that you should change the root user's password after the service is created.**

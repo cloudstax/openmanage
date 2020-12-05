@@ -10,8 +10,8 @@ ENV KAFKA_USER=kafka
 RUN set -x \
   && adduser -D "$KAFKA_USER"
 
-ENV KAFKA_VERSION 2.1.0
-ENV KAFKA_SCALA_VERSION 2.12
+ENV KAFKA_VERSION 2.6.0
+ENV KAFKA_SCALA_VERSION 2.13
 ENV KAFKA_RELEASE kafka_${KAFKA_SCALA_VERSION}-${KAFKA_VERSION}
 
 # Download Kafka Zookeeper, verify its digest integrity, untar and clean up

@@ -47,25 +47,7 @@ RUN set -ex; \
 	\
 	apt-get purge -y --auto-remove wget
 
-# https://www.apache.org/dist/couchdb/KEYS
-ENV GPG_KEYS \
-  15DD4F3B8AACA54740EB78C7B7B7C53943ECCEE1 \
-  1CFBFA43C19B6DF4A0CA3934669C02FFDF3CEBA3 \
-  25BBBAC113C1BFD5AA594A4C9F96B92930380381 \
-  4BFCA2B99BADC6F9F105BEC9C5E32E2D6B065BFB \
-  5D680346FAA3E51B29DBCB681015F68F9DA248BC \
-  7BCCEB868313DDA925DF1805ECA5BCB7BB9656B0 \
-  C3F4DFAEAD621E1C94523AEEC376457E61D50B88 \
-  D2B17F9DA23C0A10991AF2E3D9EE01E47852AEE4 \
-  E0AF0A194D55C84E4A19A801CDB0C0F904F4EE9B \
-  29E4F38113DF707D722A6EF91FE9AF73118F1A7C \
-  2EC788AE3F239FA13E82D215CDE711289384AE37
-RUN set -xe \
-  && for key in $GPG_KEYS; do \
-    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
-  done
-
-ENV COUCHDB_VERSION 2.1.1
+ENV COUCHDB_VERSION 2.3.1
 
 # Download dev dependencies
 RUN buildDeps=' \
@@ -83,6 +65,8 @@ RUN buildDeps=' \
  && cd /usr/src && mkdir couchdb \
  && curl -fSL https://dist.apache.org/repos/dist/release/couchdb/source/$COUCHDB_VERSION/apache-couchdb-$COUCHDB_VERSION.tar.gz -o couchdb.tar.gz \
  && curl -fSL https://dist.apache.org/repos/dist/release/couchdb/source/$COUCHDB_VERSION/apache-couchdb-$COUCHDB_VERSION.tar.gz.asc -o couchdb.tar.gz.asc \
+ && export GPG_KEY=$(gpg --keyid-format=short --list-packets "couchdb.tar.gz.asc" | grep -oE 'keyid .*' | cut -f2 -d' ') \
+ && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
  && gpg --batch --verify couchdb.tar.gz.asc couchdb.tar.gz \
  && tar -xzf couchdb.tar.gz -C couchdb --strip-components=1 \
  && cd couchdb \

@@ -1,22 +1,22 @@
 #!/bin/bash
 
 if [ -z "$ZK_HOSTS" -o -z "$CLUSTER" -o -z "$SERVICE_NAME" ]; then
-  echo "error: please specify the ZK_HOSTS $ZK_HOSTS, CLUSTER $CLUSTER and SERVICE $SERVICE_NAME"
+  echo "error: please specify the ZK_HOSTS $ZK_HOSTS, CLUSTER $CLUSTER and SERVICE_NAME $SERVICE_NAME"
   exit 1
 fi
 
 if [[ $KM_USERNAME != ''  && $KM_PASSWORD != '' ]]; then
-  sed -i.bak '/^basicAuthentication/d' /kafka-manager-${KM_VERSION}/conf/application.conf
-  echo 'basicAuthentication.enabled=true' >> /kafka-manager-${KM_VERSION}/conf/application.conf
-  echo "basicAuthentication.username=${KM_USERNAME}" >> /kafka-manager-${KM_VERSION}/conf/application.conf
-  echo "basicAuthentication.password=${KM_PASSWORD}" >> /kafka-manager-${KM_VERSION}/conf/application.conf
-  echo 'basicAuthentication.realm="Kafka-Manager"' >> /kafka-manager-${KM_VERSION}/conf/application.conf
+  sed -i.bak '/^basicAuthentication/d' ${KM_CONFIGFILE}
+  echo 'basicAuthentication.enabled=true' >> ${KM_CONFIGFILE}
+  echo "basicAuthentication.username=${KM_USERNAME}" >> ${KM_CONFIGFILE}
+  echo "basicAuthentication.password=${KM_PASSWORD}" >> ${KM_CONFIGFILE}
+  echo 'basicAuthentication.realm="Kafka-Manager"' >> ${KM_CONFIGFILE}
 fi
 
 # for now, simply pass all configs in env variables. later, we may put all configs in service.conf
 if [ "$CONTAINER_PLATFORM" = "ecs" -o "$CONTAINER_PLATFORM" = "swarm" ]; then
   # select one service member, update member dns and write the member dns name to /etc/firecamp-member.
-  /kafka-manager-${KM_VERSION}/firecamp-selectmember -cluster=$CLUSTER -service-name=$SERVICE_NAME -container-platform=$CONTAINER_PLATFORM
+  ./firecamp-selectmember -cluster=$CLUSTER -service-name=$SERVICE_NAME -container-platform=$CONTAINER_PLATFORM
 
   # load member configs
   . /etc/firecamp-member
@@ -33,4 +33,3 @@ else
 fi
 
 exec ./bin/kafka-manager -Dconfig.file=${KM_CONFIGFILE} "${KM_ARGS}" "${@}"
-

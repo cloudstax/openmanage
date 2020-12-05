@@ -3,7 +3,7 @@ package common
 const (
 	Version        = "latest"
 	CatalogVersion = "latest"
-	Version1       = "1.0"
+	Version1       = "1.2"
 
 	CloudPlatformAWS = "aws"
 
@@ -17,7 +17,7 @@ const (
 	ContainerPlatformRoleWorker  = "worker"
 
 	// OrgName and SystemName could not include "-"
-	OrgName             = "cloudstax/"
+	OrgName             = "jazzl0ver/"
 	SystemName          = "firecamp"
 	ContainerNamePrefix = OrgName + SystemName + "-"
 

@@ -29,27 +29,32 @@ RUN set -x \
 	&& export GNUPGHOME="$(mktemp -d)" \
 	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
 	&& gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
-	&& rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
+	&& rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc \
 	&& chmod +x /usr/local/bin/gosu \
 	&& gosu nobody true \
 	&& apt-get purge -y --auto-remove ca-certificates wget
 
-# https://wiki.apache.org/cassandra/DebianPackaging#Adding_Repository_Keys
-ENV GPG_KEYS \
-# gpg: key 0353B12C: public key "T Jake Luciani <jake@apache.org>" imported
-	514A2AD631A57A16DD0047EC749D6EEC0353B12C \
-# gpg: key FE4B2BDA: public key "Michael Shuler <michael@pbandjelly.org>" imported
-	A26E528B271F19B9E5D8E19EA278B781FE4B2BDA
-RUN set -ex; \
-	export GNUPGHOME="$(mktemp -d)"; \
-	for key in $GPG_KEYS; do \
-		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
-	done; \
-	gpg --export $GPG_KEYS > /etc/apt/trusted.gpg.d/cassandra.gpg; \
-	rm -r "$GNUPGHOME"; \
-	apt-key list
+# https://cwiki.apache.org/confluence/display/CASSANDRA2/DebianPackaging
+#ENV GPG_KEYS \
+## gpg: key 0353B12C: public key "T Jake Luciani <jake@apache.org>" imported
+#	514A2AD631A57A16DD0047EC749D6EEC0353B12C \
+## gpg: key FE4B2BDA: public key "Michael Shuler <michael@pbandjelly.org>" imported
+#	A26E528B271F19B9E5D8E19EA278B781FE4B2BDA
+#RUN set -ex; \
+#	export GNUPGHOME="$(mktemp -d)"; \
+#	for key in $GPG_KEYS; do \
+#		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+#	done; \
+#	gpg --export $GPG_KEYS > /etc/apt/trusted.gpg.d/cassandra.gpg; \
+#	rm -rf "$GNUPGHOME"; \
+#	apt-key list
+RUN set -ex \
+	&& apt-get update && apt-get install -y --no-install-recommends apt-transport-https ca-certificates wget && rm -rf /var/lib/apt/lists/* \
+	&& wget -O- https://www.apache.org/dist/cassandra/KEYS | apt-key add - \
+	&& apt-key list \
+	&& apt-get purge -y --auto-remove wget
 
-ENV CASSANDRA_VERSION 3.11.2
+ENV CASSANDRA_VERSION 3.11.8
 
 RUN set -ex; \
   mkdir -p /usr/share/man/man1/; \

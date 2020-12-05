@@ -89,7 +89,7 @@ if [ -f $servicecfgfile ]; then
   # set java options
   export KAFKA_HEAP_OPTS="-Xmx${HEAP_SIZE_MB}m -Xms${HEAP_SIZE_MB}m"
   export KAFKA_JVM_PERFORMANCE_OPTS="-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -XX:+DisableExplicitGC -Djava.awt.headless=true -XX:G1HeapRegionSize=16M -XX:MetaspaceSize=96m -XX:MinMetaspaceFreeRatio=50 -XX:MaxMetaspaceFreeRatio=80"
-  export KAFKA_JMX_OPTS="-Djava.rmi.server.hostname=$SERVICE_MEMBER -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.password.file=$kafkacfgdir/jmxremote.password -Dcom.sun.management.jmxremote.access.file=$kafkacfgdir/jmxremote.access -Dcom.sun.management.jmxremote.authenticate=true -Dcom.sun.management.jmxremote.ssl=false"
+  export KAFKA_JMX_OPTS="-Djava.rmi.server.hostname=$SERVICE_MEMBER -Dcom.sun.management.jmxremote.rmi.port=$JMX_PORT -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.password.file=$kafkacfgdir/jmxremote.password -Dcom.sun.management.jmxremote.access.file=$kafkacfgdir/jmxremote.access -Dcom.sun.management.jmxremote.authenticate=true -Dcom.sun.management.jmxremote.ssl=false"
 
 else
   # load the sys config file. the syscfgfile exists before 0.9.6
@@ -105,6 +105,7 @@ echo $KAFKA_HEAP_OPTS
 echo $KAFKA_JVM_PERFORMANCE_OPTS
 export KAFKA_HEAP_OPTS=$KAFKA_HEAP_OPTS
 export KAFKA_JVM_PERFORMANCE_OPTS=$KAFKA_JVM_PERFORMANCE_OPTS
+export JMX_PORT=$JMX_PORT
 
 echo "$@"
 exec "$@"

@@ -8,8 +8,6 @@ To build a new release, a few steps are required. This will be enhanced in the f
 
 Update the README.md and docs/installation/README.md to the new version as well.
 
-Check whether need to update AMI ID in firecamp-autoscalegroup.template, https://aws.amazon.com/amazon-linux-ami/
-
 2. Upload the new files
 Create the new release folder in the "cloudstax" bucket, such as firecamp/releases/1.0. Create subfolders: "templates", "scripts", "packages". Upload all templates under packages/aws-cloudformation/ to "templates", upload packages/aws-cloudformation/init.sh to "scripts", and upload $GOPATH/bin/firecamp-service-cli.tgz and $GOPATH/bin/firecamp-swarminit.tgz to "packages". The swarminit command is used by packaging/aws-cloudformation/init.sh to initialize the Docker Swarm cluster.
 

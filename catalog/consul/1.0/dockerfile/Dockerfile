@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.9
 
 # This is the release of Consul to pull in.
 ENV CONSUL_VERSION=1.0.0
@@ -17,12 +17,13 @@ RUN addgroup consul && \
 
 # Set up certificates, our base tools, and Consul.
 RUN apk add --no-cache ca-certificates curl gnupg libcap openssl && \
-    gpg --keyserver pgp.mit.edu --recv-keys 91A6E7F85D05C65630BEF18951852D87348FFC4C && \
     mkdir -p /tmp/build && \
     cd /tmp/build && \
     wget ${HASHICORP_RELEASES}/docker-base/${DOCKER_BASE_VERSION}/docker-base_${DOCKER_BASE_VERSION}_linux_amd64.zip && \
     wget ${HASHICORP_RELEASES}/docker-base/${DOCKER_BASE_VERSION}/docker-base_${DOCKER_BASE_VERSION}_SHA256SUMS && \
     wget ${HASHICORP_RELEASES}/docker-base/${DOCKER_BASE_VERSION}/docker-base_${DOCKER_BASE_VERSION}_SHA256SUMS.sig && \
+    export GPG_KEY=$(gpg --keyid-format=short --list-packets "docker-base_${DOCKER_BASE_VERSION}_SHA256SUMS.sig" | grep -oE 'keyid .*' | cut -f2 -d' ') && \
+    gpg --keyserver sks-keyservers.net --recv-keys "$GPG_KEY" && \
     gpg --batch --verify docker-base_${DOCKER_BASE_VERSION}_SHA256SUMS.sig docker-base_${DOCKER_BASE_VERSION}_SHA256SUMS && \
     grep ${DOCKER_BASE_VERSION}_linux_amd64.zip docker-base_${DOCKER_BASE_VERSION}_SHA256SUMS | sha256sum -c && \
     unzip docker-base_${DOCKER_BASE_VERSION}_linux_amd64.zip && \

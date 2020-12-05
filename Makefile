@@ -1,7 +1,7 @@
 
 .PHONY: install docker test
 
-org="cloudstax/"
+org="jazzl0ver/"
 version="latest"
 catalogversion="latest"
 

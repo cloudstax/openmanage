@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	defaultVersion = "2.1"
+	defaultVersion = "2.3"
 	// ContainerImage is the main running container.
 	ContainerImage = common.ContainerNamePrefix + "couchdb:" + defaultVersion
 	// InitContainerImage initializes the couchdb cluster.

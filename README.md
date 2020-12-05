@@ -50,7 +50,7 @@ Basically, the FireCamp platform maintains the service membership and data volum
 ## Installation
 The FireCamp cluster could be easily installed using AWS CloudFormation for AWS ECS and Docker Swarm.
 1. [Create FireCamp cluster via AWS QuickStart](https://aws.amazon.com/quickstart/architecture/cloudstax-firecamp/). This will create an ECS or Docker Swarm cluster across 3 availability zones. The cluster only has the private network address and not accessible from the external internet. The Bastion node is also created and is the only node that could SSH to the cluster.
-2. SSH to the Bastion node and wget firecamp cli of the installed release. For example, to get the cli of release 1.0, `wget https://s3.amazonaws.com/cloudstax/firecamp/releases/1.0/packages/firecamp-service-cli.tgz`.
+2. SSH to the Bastion node and wget firecamp cli of the installed release. For example, to get the cli of release 1.2, `wget https://s3.amazonaws.com/cloudstax/firecamp/releases/1.2/packages/firecamp-service-cli.tgz`.
 3. Use the firecamp cli to create the stateful service. Refer to each catalog service for the detail tutorials of the service, such as [MongoDB](https://github.com/cloudstax/firecamp/tree/master/catalog/mongodb#tutorials).
 
 For the Installation details, please refer to [Installation](https://github.com/cloudstax/firecamp/tree/master/docs/installation).

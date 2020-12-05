@@ -110,6 +110,9 @@ if [ -f "$servicecfgfile" ]; then
   sed -i 's/authenticator:.*/authenticator: PasswordAuthenticator/g' $DefaultYaml
   sed -i 's/authorizer:.*/authorizer: CassandraAuthorizer/g' $DefaultYaml
 
+  sed -ie 's/batch_size_warn_threshold_in_kb: 5/batch_size_warn_threshold_in_kb: 100/' $DefaultYaml
+  sed -ie 's/batch_size_fail_threshold_in_kb: 50/batch_size_fail_threshold_in_kb: 1000/' $DefaultYaml
+
   # replace the configs in cassandra-rackdc.properties
   RackdcFile="/etc/cassandra/cassandra-rackdc.properties"
   sed -i 's/dc=.*/dc='$REGION'/g' $RackdcFile

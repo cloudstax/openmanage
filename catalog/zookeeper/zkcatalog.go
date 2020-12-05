@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	defaultVersion = "3.4"
+	defaultVersion = "3.5"
 	// ContainerImage is the main ZooKeeper running container.
 	ContainerImage = common.ContainerNamePrefix + "zookeeper:" + defaultVersion
 
